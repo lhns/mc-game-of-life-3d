@@ -14,11 +14,16 @@ import net.minecraft.world.{BlockView, World}
 
 import scala.jdk.CollectionConverters._
 
-class CellBlock(createBlockEntity: BlockView => BlockEntity, val rules: GameRules) extends Block(CellBlock.settings) with BlockEntityProvider {
+class CellBlock(createBlockEntity: BlockView => BlockEntity,
+                val rules: GameRules)
+  extends Block(CellBlock.settings) with BlockEntityProvider with MovableBlockEntityProvider {
+
   def getState(state: CellState): BlockState =
     getStateManager.getDefaultState.`with`(CellBlock.STATE, state)
 
   setDefaultState(getState(state = CellState.Inactive))
+
+  override def isMovable(blockState: BlockState): Boolean = true
 
   override protected def appendProperties(stateManager: StateManager.Builder[Block, BlockState]): Unit =
     stateManager.add(CellBlock.STATE)
@@ -33,21 +38,6 @@ class CellBlock(createBlockEntity: BlockView => BlockEntity, val rules: GameRule
     } else
       ActionResult.PASS
   }
-
-  /*override def getVisualShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
-    VoxelShapes.empty
-
-  override def getCullingShape(state: BlockState, world: BlockView, pos: BlockPos): VoxelShape =
-    VoxelShapes.empty
-
-  @Environment(EnvType.CLIENT)
-  override def getAmbientOcclusionLightLevel(state: BlockState, world: BlockView, pos: BlockPos) = 1.0F
-
-  override def isTranslucent(state: BlockState, world: BlockView, pos: BlockPos) = true
-
-  @Environment(EnvType.CLIENT)
-  override def isSideInvisible(state: BlockState, stateFrom: BlockState, direction: Direction): Boolean =
-    false //if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)*/
 }
 
 object CellBlock {

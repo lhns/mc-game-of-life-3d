@@ -15,11 +15,15 @@ import net.minecraft.util.shape.{VoxelShape, VoxelShapes}
 import net.minecraft.util.{ActionResult, Hand}
 import net.minecraft.world.{BlockView, World}
 
-class CellSupportBlock() extends Block(CellSupportBlock.settings) with BlockEntityProvider {
+class CellSupportBlock()
+  extends Block(CellSupportBlock.settings) with BlockEntityProvider with MovableBlockEntityProvider {
+
   def getState(active: Boolean): BlockState =
     getStateManager.getDefaultState.`with`(CellSupportBlock.ACTIVE, java.lang.Boolean.valueOf(active))
 
   setDefaultState(getState(active = false))
+
+  override def isMovable(blockState: BlockState): Boolean = true
 
   override protected def appendProperties(stateManager: StateManager.Builder[Block, BlockState]): Unit =
     stateManager.add(CellSupportBlock.ACTIVE)
@@ -49,7 +53,7 @@ class CellSupportBlock() extends Block(CellSupportBlock.settings) with BlockEnti
 
   @Environment(EnvType.CLIENT)
   override def isSideInvisible(state: BlockState, stateFrom: BlockState, direction: Direction): Boolean =
-    false //if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)
+    if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)
 }
 
 object CellSupportBlock {
