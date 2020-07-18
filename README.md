@@ -10,5 +10,13 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 - Cell blocks that follow the rules of a Game of Life variation by Carter Bays (5766)
 - Cell support blocks that can connect together separate cell structures to help you in activating them all at once
 
+## Screenshots
+![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18_23.18.23.png)
+![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18%20232058.png)
+
+## Videos
+[![](https://img.youtube.com/vi/sQOsDWcU1sc/0.jpg)](https://www.youtube.com/watch?v=sQOsDWcU1sc)
+[![](https://img.youtube.com/vi/5bM4YJ2GlI8/0.jpg)](https://www.youtube.com/watch?v=5bM4YJ2GlI8)
+
 ## License
 This project uses the Apache 2.0 License. See the file called LICENSE.
