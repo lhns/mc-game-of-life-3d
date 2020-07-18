@@ -63,13 +63,13 @@ class CellBlockEntity extends BlockEntity(GameOfLife3dMod.CELL_BLOCK_ENTITY) wit
           val neighborCount = neighbors.count(isAlive(world, _))
           if (!rules.remainAlive(neighborCount)) {
             world.setBlockState(pos, GameOfLife3dMod.CELL_BLOCK.getState(state = State.ScheduledDead))
-          } else {
-            neighbors.foreach { neighbor =>
-              if (isEmpty(world, neighbor)) {
-                val neighborNeighborCount = neighborOffsets.count(e => isAlive(world, neighbor.add(e)))
-                if (rules.becomeAlive(neighborNeighborCount)) {
-                  world.setBlockState(neighbor, GameOfLife3dMod.CELL_BLOCK.getState(state = State.ScheduledAlive))
-                }
+          }
+
+          neighbors.foreach { neighbor =>
+            if (isEmpty(world, neighbor)) {
+              val neighborNeighborCount = neighborOffsets.count(e => isAlive(world, neighbor.add(e)))
+              if (rules.becomeAlive(neighborNeighborCount)) {
+                world.setBlockState(neighbor, GameOfLife3dMod.CELL_BLOCK.getState(state = State.ScheduledAlive))
               }
             }
           }
