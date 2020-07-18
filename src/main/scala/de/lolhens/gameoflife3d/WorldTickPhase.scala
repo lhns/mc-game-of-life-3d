@@ -12,7 +12,7 @@ class WorldTickPhase() {
 
   def mark: Boolean = ticks == 0
 
-  def sweep: Boolean = !mark
+  def sweep: Boolean = ticks == 1
 
   def yieldOnce(): Unit =
     if (ticks == interval) ticks -= 1
