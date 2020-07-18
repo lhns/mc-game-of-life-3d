@@ -1,37 +1,31 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "gameoflife3d",
   "version": "${version}",
-
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Game of Life 3D",
+  "description": "This mod implements a variation of John Conway's Game of Life by Carter Bays (variation 5766).",
   "authors": [
-    "Me!"
+    "LolHens"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/LolHens/mc-game-of-life-3d",
+    "sources": "https://github.com/LolHens/mc-game-of-life-3d"
   },
-
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
-
+  "license": "Apache-2.0",
+  "icon": "assets/gameoflife3d/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      {
+        "adapter": "scala",
+        "value": "de.lolhens.gameoflife3d.GameOfLife3dMod"
+      }
     ]
   },
-  "mixins": [
-    "modid.mixins.json"
-  ],
-
   "depends": {
+    "fabric-language-scala": "*",
     "fabricloader": ">=0.7.4",
     "fabric": "*",
     "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }
