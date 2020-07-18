@@ -3,7 +3,7 @@
   "id": "gameoflife3d",
   "version": "${version}",
   "name": "Game of Life 3D",
-  "description": "This mod implements a variation of John Conway's Game of Life by Carter Bays (variation 5766).",
+  "description": "This mod implements John Conway's Game of Life and a 3D variation by Carter Bays (variation 5766).",
   "authors": [
     "LolHens"
   ],
