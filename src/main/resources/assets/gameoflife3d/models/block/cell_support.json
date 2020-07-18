@@ -1,0 +1,6 @@
+{
+  "parent": "gameoflife3d:block/cell_support_parent",
+  "textures": {
+    "texture": "gameoflife3d:block/cell"
+  }
+}

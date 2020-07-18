@@ -1,40 +1,42 @@
 package de.lolhens.gameoflife3d.block
 
-import de.lolhens.gameoflife3d.game.{CellState, GameCycle, GameRules}
+import de.lolhens.gameoflife3d.GameOfLife3dMod
+import de.lolhens.gameoflife3d.game.{CellState, GameCycle}
+import net.fabricmc.api.{EnvType, Environment}
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block._
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.EnumProperty
+import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.{BlockPos, Direction}
+import net.minecraft.util.shape.{VoxelShape, VoxelShapes}
 import net.minecraft.util.{ActionResult, Hand}
 import net.minecraft.world.{BlockView, World}
 
-import scala.jdk.CollectionConverters._
+class CellSupportBlock() extends Block(CellSupportBlock.settings) with BlockEntityProvider {
+  def getState(active: Boolean): BlockState =
+    getStateManager.getDefaultState.`with`(CellSupportBlock.ACTIVE, java.lang.Boolean.valueOf(active))
 
-class CellBlock(createBlockEntity: BlockView => BlockEntity, val rules: GameRules) extends Block(CellBlock.settings) with BlockEntityProvider {
-  def getState(state: CellState): BlockState =
-    getStateManager.getDefaultState.`with`(CellBlock.STATE, state)
-
-  setDefaultState(getState(state = CellState.Inactive))
+  setDefaultState(getState(active = false))
 
   override protected def appendProperties(stateManager: StateManager.Builder[Block, BlockState]): Unit =
-    stateManager.add(CellBlock.STATE)
+    stateManager.add(CellSupportBlock.ACTIVE)
 
-  override def createBlockEntity(world: BlockView): BlockEntity = createBlockEntity.apply(world)
+  override def createBlockEntity(world: BlockView): BlockEntity =
+    GameOfLife3dMod.cellSupportBlockEntity.instantiate()
 
   override def onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult = {
-    if (!CellState.fromBlockState(state, Some(this)).get.isActive) {
-      world.setBlockState(pos, getState(state = CellState.Alive))
+    if (!CellState.fromBlockState(state, None).get.isActive) {
+      world.setBlockState(pos, getState(active = true))
       GameCycle.ofWorld(world).foreach(_.blocksActivated())
       ActionResult.SUCCESS
     } else
       ActionResult.PASS
   }
 
-  /*override def getVisualShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
+  override def getVisualShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
     VoxelShapes.empty
 
   override def getCullingShape(state: BlockState, world: BlockView, pos: BlockPos): VoxelShape =
@@ -47,15 +49,16 @@ class CellBlock(createBlockEntity: BlockView => BlockEntity, val rules: GameRule
 
   @Environment(EnvType.CLIENT)
   override def isSideInvisible(state: BlockState, stateFrom: BlockState, direction: Direction): Boolean =
-    false //if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)*/
+    false //if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)
 }
 
-object CellBlock {
+object CellSupportBlock {
   private val settings =
     FabricBlockSettings
       .of(Material.STONE)
       .hardness(2.0F)
       .resistance(6.0F)
 
-  val STATE: EnumProperty[CellState] = EnumProperty.of("state", classOf[CellState], CellState.values.asJavaCollection)
+  val ACTIVE: BooleanProperty = BooleanProperty.of("active")
 }
+

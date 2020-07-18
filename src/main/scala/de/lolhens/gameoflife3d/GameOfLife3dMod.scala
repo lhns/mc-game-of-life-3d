@@ -1,6 +1,7 @@
 package de.lolhens.gameoflife3d
 
-import de.lolhens.gameoflife3d.block.{CellBlock, CellBlockEntity}
+import de.lolhens.gameoflife3d.block.{CellBlock, CellBlockEntity, CellSupportBlock, CellSupportBlockEntity}
+import de.lolhens.gameoflife3d.game.{GameCycle, GameRules}
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.loader.api.FabricLoader
@@ -18,21 +19,49 @@ object GameOfLife3dMod extends ModInitializer {
       .iterator().asScala.find(_.getEntrypoint == this).get.getProvider.getMetadata
   }
 
-  val CELL_BLOCK_ID = new Identifier(metadata.getId, "cell")
-  val CELL_BLOCK: CellBlock = new CellBlock()
-  val CELL_BLOCK_ENTITY: BlockEntityType[CellBlockEntity] = BlockEntityType.Builder.create(() => new CellBlockEntity(), CELL_BLOCK).build(null)
+  private def makeCellBlock(id: String, rules: GameRules): (Identifier, CellBlock, BlockEntityType[CellBlockEntity], () => Unit) = {
+    val blockId = new Identifier(metadata.getId, id)
+    lazy val block: CellBlock = new CellBlock(_ => bockEntity.instantiate(), rules)
+    lazy val bockEntity: BlockEntityType[CellBlockEntity] = BlockEntityType.Builder.create(() => new CellBlockEntity(bockEntity, block), block).build(null)
 
-  def rules: GameOfLifeRules = GameOfLifeRules.ConwaysRules
+    def register(): Unit = {
+      Registry.register(Registry.BLOCK, blockId, block)
+      Registry.register(Registry.ITEM, blockId, new BlockItem(block, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)))
+      Registry.register(Registry.BLOCK_ENTITY_TYPE, blockId, bockEntity)
+    }
+
+    (blockId, block, bockEntity, register)
+  }
+
+  val (
+    cellConwayBlockId,
+    cellConwayBlock,
+    cellConwayBlockEntity,
+    cellConwayBlockRegister
+    ) = makeCellBlock("cell_conway", GameRules.ConwaysRules)
+
+  val (
+    cellBaysBlockId,
+    cellBaysBlock,
+    cellBaysBlockEntity,
+    cellBaysBlockRegister
+    ) = makeCellBlock("cell_bays", GameRules.BaysRules5766)
+
+  val cellSupportBlockId = new Identifier(metadata.getId, "cell_support")
+  val cellSupportBlock: CellSupportBlock = new CellSupportBlock()
+  val cellSupportBlockEntity: BlockEntityType[CellSupportBlockEntity] = BlockEntityType.Builder.create(() => new CellSupportBlockEntity(), cellSupportBlock).build(null)
 
   def interval: Int = 10
 
   override def onInitialize(): Unit = {
-    Registry.register(Registry.BLOCK, CELL_BLOCK_ID, CELL_BLOCK)
-    Registry.register(Registry.ITEM, CELL_BLOCK_ID, new BlockItem(CELL_BLOCK, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)))
-    Registry.register(Registry.BLOCK_ENTITY_TYPE, CELL_BLOCK_ID, CELL_BLOCK_ENTITY)
+    cellConwayBlockRegister()
+    cellBaysBlockRegister()
 
-    ServerTickEvents.START_WORLD_TICK.register { world =>
-      WorldTickPhase.startWorldTick(world)
-    }
+    Registry.register(Registry.BLOCK, cellSupportBlockId, cellSupportBlock)
+    Registry.register(Registry.ITEM, cellSupportBlockId, new BlockItem(cellSupportBlock, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)))
+    Registry.register(Registry.BLOCK_ENTITY_TYPE, cellSupportBlockId, cellSupportBlockEntity)
+
+    ServerTickEvents.START_WORLD_TICK.register(GameCycle.startWorldTick)
+    ServerTickEvents.END_WORLD_TICK.register(GameCycle.endWorldTick)
   }
 }

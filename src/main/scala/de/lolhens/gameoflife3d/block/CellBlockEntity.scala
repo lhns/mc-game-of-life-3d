@@ -1,75 +1,74 @@
 package de.lolhens.gameoflife3d.block
 
-import de.lolhens.gameoflife3d.block.CellBlock.State
-import de.lolhens.gameoflife3d.{GameOfLife3dMod, GameOfLifeRules, WorldTickPhase}
-import net.minecraft.block.entity.BlockEntity
+import de.lolhens.gameoflife3d.game.{CellState, GameCycle, GameRules}
+import net.minecraft.block.entity.{BlockEntity, BlockEntityType}
 import net.minecraft.block.{BlockState, Blocks}
 import net.minecraft.item.{AutomaticItemPlacementContext, ItemStack}
 import net.minecraft.util.Tickable
 import net.minecraft.util.math.{BlockPos, Direction, Vec3i}
-import net.minecraft.world.WorldView
 
-class CellBlockEntity extends BlockEntity(GameOfLife3dMod.CELL_BLOCK_ENTITY) with Tickable {
-  private def isEmpty(world: WorldView, pos: BlockPos): Boolean = {
+class CellBlockEntity(`type`: BlockEntityType[CellBlockEntity], block: CellBlock) extends BlockEntity(`type`) with Tickable {
+  private def isEmpty(pos: BlockPos): Boolean = {
     val state = world.getBlockState(pos)
-    state.canReplace(new AutomaticItemPlacementContext(this.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)) ||
-      state.isOf(GameOfLife3dMod.CELL_BLOCK) && !state.get(CellBlock.STATE).isAlive
+    state.canReplace(new AutomaticItemPlacementContext(world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)) ||
+      CellState.fromBlockState(state, Some(block)).exists(!_.isAlive)
   }
 
-  private def isAlive(world: WorldView, pos: BlockPos): Boolean = {
-    val state = world.getBlockState(pos)
-    state.isOf(GameOfLife3dMod.CELL_BLOCK) && state.get(CellBlock.STATE).isAlive
-  }
+  private def isActive(pos: BlockPos): Boolean =
+    CellState.fromBlockState(world.getBlockState(pos), Some(block)).exists(_.isActive)
 
-  private def rules: GameOfLifeRules = GameOfLife3dMod.rules
+  private def isAlive(pos: BlockPos): Boolean =
+    CellState.fromBlockState(world.getBlockState(pos), Some(block)).exists(_.isAlive)
+
+  private def rules: GameRules = block.rules
 
   private def neighborOffsets: Array[Vec3i] =
     if (rules.onlyHorizontal) CellBlockEntity.horizontalNeighborOffsets else CellBlockEntity.neighborOffsets
 
   override def tick(): Unit = {
     val world = getWorld
-    WorldTickPhase(world).foreach { phase =>
+    GameCycle.ofWorld(world).foreach { cycle =>
       val pos = getPos
-      val state = world.getBlockState(pos).get(CellBlock.STATE)
+      val state = world.getBlockState(pos)
+      val cellState = CellState.fromBlockState(state, Some(block)).get
 
-      if (phase.sweep) {
-        val newState: Option[BlockState] = state match {
-          case State.ScheduledDead =>
-            Some(Blocks.AIR.getDefaultState)
-
-          case State.ScheduledAlive =>
-            Some(GameOfLife3dMod.CELL_BLOCK.getState(state = State.Alive))
-
-          case State.Inactive =>
-            val activeNeighbor = neighborOffsets.exists { offset =>
-              val state = world.getBlockState(pos.add(offset))
-              state.isOf(GameOfLife3dMod.CELL_BLOCK) && state.get(CellBlock.STATE).isActive
-            }
+      if (cycle.sweep) {
+        val newState: Option[BlockState] = cellState match {
+          case inactive if !inactive.isActive =>
+            val activeNeighbor = neighborOffsets.exists(offset => isActive(pos.add(offset)))
 
             if (activeNeighbor) {
-              phase.yieldOnce()
-              Some(GameOfLife3dMod.CELL_BLOCK.getState(state = State.Alive))
+              cycle.blocksActivated()
+              Some(block.getState(state = CellState.Alive))
             } else
               None
-          case _ => None
+
+          case CellState.ScheduledDead =>
+            Some(Blocks.AIR.getDefaultState)
+
+          case CellState.ScheduledAlive =>
+            Some(block.getState(state = CellState.Alive))
+
+          case _ =>
+            None
         }
 
         newState.foreach { state =>
           world.setBlockState(pos, state)
         }
-      } else if (phase.mark) {
-        if (state.isAlive && state.isActive) {
+      } else if (cycle.mark) {
+        if (cellState.isAlive && cellState.isActive) {
           val neighbors = neighborOffsets.map(pos.add)
-          val neighborCount = neighbors.count(isAlive(world, _))
+          val neighborCount = neighbors.count(isAlive)
           if (!rules.remainAlive(neighborCount)) {
-            world.setBlockState(pos, GameOfLife3dMod.CELL_BLOCK.getState(state = State.ScheduledDead))
+            world.setBlockState(pos, block.getState(state = CellState.ScheduledDead))
           }
 
           neighbors.foreach { neighbor =>
-            if (isEmpty(world, neighbor)) {
-              val neighborNeighborCount = neighborOffsets.count(e => isAlive(world, neighbor.add(e)))
+            if (isEmpty(neighbor)) {
+              val neighborNeighborCount = neighborOffsets.count(e => isAlive(neighbor.add(e)))
               if (rules.becomeAlive(neighborNeighborCount)) {
-                world.setBlockState(neighbor, GameOfLife3dMod.CELL_BLOCK.getState(state = State.ScheduledAlive))
+                world.setBlockState(neighbor, block.getState(state = CellState.ScheduledAlive))
               }
             }
           }
@@ -80,7 +79,7 @@ class CellBlockEntity extends BlockEntity(GameOfLife3dMod.CELL_BLOCK_ENTITY) wit
 }
 
 object CellBlockEntity {
-  private val neighborOffsets: Array[Vec3i] =
+  private[gameoflife3d] val neighborOffsets: Array[Vec3i] =
     (for {
       z <- -1 to 1
       y <- -1 to 1
