@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.{BlockPos, Direction}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.{VoxelShape, VoxelShapes}
 import net.minecraft.util.{ActionResult, Hand}
 import net.minecraft.world.{BlockView, World}
@@ -40,28 +40,29 @@ class CellSupportBlock()
       ActionResult.PASS
   }
 
-  override def getVisualShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
-    VoxelShapes.empty
-
-  override def getCullingShape(state: BlockState, world: BlockView, pos: BlockPos): VoxelShape =
-    VoxelShapes.empty
+  override def getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
+    CellSupportBlock.outlineShape
 
   @Environment(EnvType.CLIENT)
   override def getAmbientOcclusionLightLevel(state: BlockState, world: BlockView, pos: BlockPos) = 1.0F
 
   override def isTranslucent(state: BlockState, world: BlockView, pos: BlockPos) = true
-
-  @Environment(EnvType.CLIENT)
-  override def isSideInvisible(state: BlockState, stateFrom: BlockState, direction: Direction): Boolean =
-    if (stateFrom.isOf(this)) true else super.isSideInvisible(state, stateFrom, direction)
 }
 
 object CellSupportBlock {
   private val settings =
     FabricBlockSettings
       .of(Material.STONE)
+      .nonOpaque()
       .hardness(2.0F)
       .resistance(6.0F)
+
+  private val outlineShape: VoxelShape =
+    VoxelShapes.union(
+      Block.createCuboidShape(6, 0, 6, 10, 16, 10),
+      Block.createCuboidShape(6, 6, 0, 10, 10, 16),
+      Block.createCuboidShape(0, 6, 6, 16, 10, 10)
+    )
 
   val ACTIVE: BooleanProperty = BooleanProperty.of("active")
 }

@@ -1,6 +1,7 @@
 package de.lolhens.gameoflife3d.block
 
 import de.lolhens.gameoflife3d.game.{CellState, GameCycle, GameRules}
+import net.fabricmc.api.{EnvType, Environment}
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block._
 import net.minecraft.block.entity.BlockEntity
@@ -9,6 +10,7 @@ import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.shape.{VoxelShape, VoxelShapes}
 import net.minecraft.util.{ActionResult, Hand}
 import net.minecraft.world.{BlockView, World}
 
@@ -16,7 +18,7 @@ import scala.jdk.CollectionConverters._
 
 class CellBlock(createBlockEntity: BlockView => BlockEntity,
                 val rules: GameRules)
-  extends Block(CellBlock.settings) with BlockEntityProvider with MovableBlockEntityProvider {
+  extends TransparentBlock(CellBlock.settings) with BlockEntityProvider with MovableBlockEntityProvider {
 
   def getState(state: CellState): BlockState =
     getStateManager.getDefaultState.`with`(CellBlock.STATE, state)
@@ -38,14 +40,26 @@ class CellBlock(createBlockEntity: BlockView => BlockEntity,
     } else
       ActionResult.PASS
   }
+
+  override def getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
+    if (rules.onlyHorizontal) CellBlock.flatOutlineShape else VoxelShapes.fullCube
+
+  @Environment(EnvType.CLIENT)
+  override def getAmbientOcclusionLightLevel(state: BlockState, world: BlockView, pos: BlockPos) = 1.0F
+
+  override def isTranslucent(state: BlockState, world: BlockView, pos: BlockPos) = true
 }
 
 object CellBlock {
   private val settings =
     FabricBlockSettings
       .of(Material.STONE)
+      .nonOpaque()
       .hardness(2.0F)
       .resistance(6.0F)
+
+  private val flatOutlineShape: VoxelShape =
+    Block.createCuboidShape(0, 4, 0, 16, 12, 16)
 
   val STATE: EnumProperty[CellState] = EnumProperty.of("state", classOf[CellState], CellState.values.asJavaCollection)
 }

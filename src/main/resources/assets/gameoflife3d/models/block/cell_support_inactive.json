@@ -1,5 +1,5 @@
 {
-  "parent": "gameoflife3d:block/cell_support_parent",
+  "parent": "gameoflife3d:block/cross",
   "textures": {
     "texture": "gameoflife3d:block/cell_inactive"
   }
