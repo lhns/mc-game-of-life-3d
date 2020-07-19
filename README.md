@@ -10,6 +10,13 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 - Cell blocks that follow the rules of a Game of Life variation by Carter Bays (5766)
 - Cell support blocks that can connect together separate cell structures to help you in activating them all at once
 
+## Usage
+- Place your cell blocks down in the desired structure.
+- The cell blocks are still gray which means that the cells are not active yet.
+- If you have multiple structures which are not directly connected but need to be activated together you can connect them using the cell support blocks. These blocks will disappear once you activate the structure.
+- Right click one of the cell blocks or cell support blocks.
+- The whole connected structure activates and the simulation starts.
+
 ## Screenshots
 ![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18_23.18.23.png)
 ![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18%20232058.png)
