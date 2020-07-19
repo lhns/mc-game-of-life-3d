@@ -18,5 +18,15 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 [![](https://img.youtube.com/vi/sQOsDWcU1sc/0.jpg)](https://www.youtube.com/watch?v=sQOsDWcU1sc)
 [![](https://img.youtube.com/vi/5bM4YJ2GlI8/0.jpg)](https://www.youtube.com/watch?v=5bM4YJ2GlI8)
 
+## Carter Bays' Game of Life 3D (5766)
+The numbers 5766 define the game rules in this context:
+- A cell requires a minimum of 5 neighbors to survive to the next generation.
+- The cell can have at most 7 neighbors or else it dies of overpopulation.
+- 66 means that a new cell is born if it has a minimum and maximum of 6 neighbors.
+
+This is in contrast to the normal game rules 2333 by John Conway and allows the system to work properly in three dimensions. The lifeforms in 5766 should look very similar to the ones found in 2333. Here are a few examples:
+
+[![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/small_stable_life_forms_5766.png)](https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf)
+
 ## License
 This project uses the Apache 2.0 License. See the file called LICENSE.
