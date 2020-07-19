@@ -20,6 +20,7 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 
 ## Carter Bays' Game of Life 3D (5766)
 The numbers 5766 define the game rules in this context:
+
 - A cell requires a minimum of 5 neighbors to survive to the next generation.
 - The cell can have at most 7 neighbors or else it dies of overpopulation.
 - 66 means that a new cell is born if it has a minimum and maximum of 6 neighbors.
