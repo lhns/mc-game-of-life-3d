@@ -32,7 +32,7 @@ The numbers 5766 define the game rules in this context:
 - The cell can have at most 7 neighbors or else it dies of overpopulation.
 - 66 means that a new cell is born if it has a minimum and maximum of 6 neighbors.
 
-This is in contrast to the normal game rules 2333 by John Conway and allows the system to work properly in three dimensions. The lifeforms in 5766 should look very similar to the ones found in 2333. Here are a few examples:
+This is in contrast to the normal game rules 2333 by John Conway and allows the system to work properly in three dimensions. The lifeforms in 5766 should look very similar to the ones found in 2333. Another nice property of 5766 is that every 2333 structure works the same when it is 2 layers thick and sandwiched between two layers of other blocks. Here are a few examples of native 3D lifeforms:
 
 [![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/small_stable_life_forms_5766.png)](https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf)
 
