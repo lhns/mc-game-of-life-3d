@@ -17,6 +17,14 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 - Right click one of the cell blocks or cell support blocks.
 - The whole connected structure activates and the simulation starts.
 
+## Recipes
+#### Cell Support
+![Cell Support](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/recipe_cell_support.png)
+#### John Conway's 2D Cell
+![John Conway's 2D Cell](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/recipe_cell_conway.png)
+#### Carter Bays' 3D Cell
+![Carter Bays' 3D Cell](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/recipe_cell_bays.png)
+
 ## Screenshots
 ![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18_23.18.23.png)
 ![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/2020-07-18%20232058.png)
