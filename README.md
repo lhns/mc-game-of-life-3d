@@ -36,5 +36,8 @@ This is in contrast to the normal game rules 2333 by John Conway and allows the 
 
 [![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/small_stable_life_forms_5766.png)](https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf)
 
+## Similar mods
+There was already a Game of Life mod for fabric out there I didn't know about when starting to work on this mod so please check out [con-craft way life of game mine by TheEpicBlock](https://github.com/TheEpicBlock/concraftwaylifeofgamemine/)
+
 ## License
 This project uses the Apache 2.0 License. See the file called LICENSE.
