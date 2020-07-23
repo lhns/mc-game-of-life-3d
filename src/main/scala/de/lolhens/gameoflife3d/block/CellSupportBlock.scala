@@ -1,35 +1,64 @@
 package de.lolhens.gameoflife3d.block
 
-import de.lolhens.gameoflife3d.GameOfLife3dMod
 import de.lolhens.gameoflife3d.game.{CellState, GameCycle}
 import net.fabricmc.api.{EnvType, Environment}
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block._
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.{BlockPos, Vec3i}
 import net.minecraft.util.shape.{VoxelShape, VoxelShapes}
 import net.minecraft.util.{ActionResult, Hand}
 import net.minecraft.world.{BlockView, World}
 
 class CellSupportBlock()
-  extends Block(CellSupportBlock.settings) with BlockEntityProvider with MovableBlockEntityProvider {
+  extends Block(CellSupportBlock.settings) with TickableBlock.BlockEntityProvider {
 
   def getState(active: Boolean): BlockState =
     getStateManager.getDefaultState.`with`(CellSupportBlock.ACTIVE, java.lang.Boolean.valueOf(active))
 
   setDefaultState(getState(active = false))
 
-  override def isMovable(blockState: BlockState): Boolean = true
-
   override protected def appendProperties(stateManager: StateManager.Builder[Block, BlockState]): Unit =
     stateManager.add(CellSupportBlock.ACTIVE)
 
-  override def createBlockEntity(world: BlockView): BlockEntity =
-    GameOfLife3dMod.cellSupportBlockEntity.instantiate()
+  private def neighborOffsets: Array[Vec3i] = CellBlock.neighborOffsets
+
+  override def tick(world: World, pos: BlockPos): Unit = {
+    def isActive(pos: BlockPos): Boolean =
+      CellState.fromBlockState(world.getBlockState(pos), None).exists(_.isActive)
+
+    GameCycle.ofWorld(world).foreach { cycle =>
+      val state = world.getBlockState(pos)
+      val cellState = CellState.fromBlockState(state, None).get
+
+      if (cycle.sweep) {
+        val newState: Option[BlockState] = cellState match {
+          case inactive if !inactive.isActive =>
+            val activeNeighbor = neighborOffsets.exists(offset => isActive(pos.add(offset)))
+
+            if (activeNeighbor) {
+              cycle.blocksActivated()
+              Some(getState(active = true))
+            } else
+              None
+
+          case _ =>
+            None
+        }
+
+        newState.foreach { state =>
+          world.setBlockState(pos, state)
+        }
+      } else if (cycle.mark) {
+        if (cellState.isActive) {
+          world.setBlockState(pos, Blocks.AIR.getDefaultState)
+        }
+      }
+    }
+  }
 
   override def onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult = {
     if (!CellState.fromBlockState(state, None).get.isActive) {
@@ -39,6 +68,7 @@ class CellSupportBlock()
     } else
       ActionResult.PASS
   }
+
 
   override def getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape =
     CellSupportBlock.outlineShape
@@ -54,8 +84,7 @@ object CellSupportBlock {
     FabricBlockSettings
       .of(Material.STONE)
       .nonOpaque()
-      .hardness(2.0F)
-      .resistance(6.0F)
+      .hardness(0.3F)
 
   private val outlineShape: VoxelShape =
     VoxelShapes.union(

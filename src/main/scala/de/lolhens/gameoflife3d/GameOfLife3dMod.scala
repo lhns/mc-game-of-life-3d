@@ -1,6 +1,6 @@
 package de.lolhens.gameoflife3d
 
-import de.lolhens.gameoflife3d.block.{CellBlock, CellBlockEntity, CellSupportBlock, CellSupportBlockEntity}
+import de.lolhens.gameoflife3d.block.{CellBlock, CellSupportBlock}
 import de.lolhens.gameoflife3d.game.{GameCycle, GameRules}
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -19,10 +19,10 @@ object GameOfLife3dMod extends ModInitializer {
       .iterator().asScala.find(_.getEntrypoint == this).get.getProvider.getMetadata
   }
 
-  private def makeCellBlock(id: String, rules: GameRules): (Identifier, CellBlock, BlockEntityType[CellBlockEntity], () => Unit) = {
+  private def makeCellBlock(id: String, rules: GameRules): (Identifier, CellBlock, BlockEntityType[_], () => Unit) = {
     val blockId = new Identifier(metadata.getId, id)
-    lazy val block: CellBlock = new CellBlock(_ => bockEntity.instantiate(), rules)
-    lazy val bockEntity: BlockEntityType[CellBlockEntity] = BlockEntityType.Builder.create(() => new CellBlockEntity(bockEntity, block), block).build(null)
+    lazy val block: CellBlock = new CellBlock(rules)
+    lazy val bockEntity = block.blockEntityType
 
     def register(): Unit = {
       Registry.register(Registry.BLOCK, blockId, block)
@@ -49,7 +49,7 @@ object GameOfLife3dMod extends ModInitializer {
 
   val cellSupportBlockId = new Identifier(metadata.getId, "cell_support")
   val cellSupportBlock: CellSupportBlock = new CellSupportBlock()
-  val cellSupportBlockEntity: BlockEntityType[CellSupportBlockEntity] = BlockEntityType.Builder.create(() => new CellSupportBlockEntity(), cellSupportBlock).build(null)
+  val cellSupportBlockEntity: BlockEntityType[_] = cellSupportBlock.blockEntityType
 
   def interval: Int = 10
 

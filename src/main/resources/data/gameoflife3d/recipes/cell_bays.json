@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": {
+      "item": "gameoflife3d:cell_support"
+    }
+  },
+  "result": {
+    "item": "gameoflife3d:cell_bays",
+    "count": 1
+  }
+}
