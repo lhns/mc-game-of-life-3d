@@ -16,7 +16,7 @@ import scala.jdk.CollectionConverters._
 object GameOfLife3dMod extends ModInitializer {
   val metadata: ModMetadata = {
     FabricLoader.getInstance().getEntrypointContainers("main", classOf[ModInitializer])
-      .iterator().asScala.find(_.getEntrypoint == this).get.getProvider.getMetadata
+      .iterator().asScala.find(this eq _.getEntrypoint).get.getProvider.getMetadata
   }
 
   private def makeCellBlock(id: String, rules: GameRules): (Identifier, CellBlock, BlockEntityType[_], () => Unit) = {
