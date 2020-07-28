@@ -2,6 +2,8 @@
 [![Release Notes](https://img.shields.io/github/release/LolHens/mc-game-of-life-3d.svg?maxAge=3600)](https://github.com/LolHens/mc-game-of-life-3d/releases/latest)
 [![Apache License 2.0](https://img.shields.io/github/license/LolHens/mc-game-of-life-3d.svg?maxAge=3600)](https://www.apache.org/licenses/LICENSE-2.0)
 
+[![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/src/main/resources/assets/gameoflife3d/icon.png)](https://www.curseforge.com/minecraft/mc-mods/game-of-life-3d)
+
 This mod implements John Conway's Game of Life and a 3D variation by Carter Bays (variation 5766).
 You can find out more about the variation here: https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf
 
