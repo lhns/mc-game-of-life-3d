@@ -1,6 +1,6 @@
-package de.lolhens.gameoflife3d.block
+package de.lolhens.minecraft.gameoflife3d.block
 
-import de.lolhens.gameoflife3d.game.{CellState, GameCycle, GameRules}
+import de.lolhens.minecraft.gameoflife3d.game.{CellState, GameCycle, GameRules}
 import net.fabricmc.api.{EnvType, Environment}
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.minecraft.block._

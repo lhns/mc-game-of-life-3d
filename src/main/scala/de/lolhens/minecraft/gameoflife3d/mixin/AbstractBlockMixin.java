@@ -1,7 +1,7 @@
-package de.lolhens.gameoflife3d.mixin;
+package de.lolhens.minecraft.gameoflife3d.mixin;
 
-import de.lolhens.gameoflife3d.block.MovableBlockEntityProvider;
-import de.lolhens.gameoflife3d.util.PistonMovableUtil;
+import de.lolhens.minecraft.gameoflife3d.block.MovableBlockEntityProvider;
+import de.lolhens.minecraft.gameoflife3d.util.PistonMovableUtil;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

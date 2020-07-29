@@ -1,7 +1,7 @@
-package de.lolhens.gameoflife3d
+package de.lolhens.minecraft.gameoflife3d
 
-import de.lolhens.gameoflife3d.block.{CellBlock, CellSupportBlock}
-import de.lolhens.gameoflife3d.game.{GameCycle, GameRules}
+import de.lolhens.minecraft.gameoflife3d.block.{CellBlock, CellSupportBlock}
+import de.lolhens.minecraft.gameoflife3d.game.{GameCycle, GameRules}
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.loader.api.FabricLoader

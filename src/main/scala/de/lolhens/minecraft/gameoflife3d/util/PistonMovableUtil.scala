@@ -1,4 +1,4 @@
-package de.lolhens.gameoflife3d.util
+package de.lolhens.minecraft.gameoflife3d.util
 
 import net.minecraft.block.BlockState
 

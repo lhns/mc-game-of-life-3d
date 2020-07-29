@@ -1,4 +1,4 @@
-package de.lolhens.gameoflife3d.game
+package de.lolhens.minecraft.gameoflife3d.game
 
 case class GameRules(minEnvironment: Int,
                      maxEnvironment: Int,

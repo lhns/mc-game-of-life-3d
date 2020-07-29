@@ -1,6 +1,6 @@
-package de.lolhens.gameoflife3d.game
+package de.lolhens.minecraft.gameoflife3d.game
 
-import de.lolhens.gameoflife3d.GameOfLife3dMod
+import de.lolhens.minecraft.gameoflife3d.GameOfLife3dMod
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.world.World
 

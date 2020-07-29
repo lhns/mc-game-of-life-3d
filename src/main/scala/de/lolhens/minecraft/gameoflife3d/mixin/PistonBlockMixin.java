@@ -1,6 +1,6 @@
-package de.lolhens.gameoflife3d.mixin;
+package de.lolhens.minecraft.gameoflife3d.mixin;
 
-import de.lolhens.gameoflife3d.util.PistonMovableUtil;
+import de.lolhens.minecraft.gameoflife3d.util.PistonMovableUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
