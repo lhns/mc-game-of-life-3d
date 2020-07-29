@@ -46,6 +46,12 @@ This is in contrast to the normal game rules 2333 by John Conway and allows the 
 
 [![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/small_stable_life_forms_5766.png)](https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf)
 
+## Requirements
+### [Fabric](https://fabricmc.net/)
+[<img src="https://fabricmc.net/assets/logo.png" width="32"> Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+
+[<img src="https://user-images.githubusercontent.com/1524059/88789314-e5dd3300-d196-11ea-99dc-2399393ef409.png" width="32"> Fabric Language Scala](https://www.curseforge.com/minecraft/mc-mods/fabric-language-scala)
+
 ## Similar mods
 There was already a Game of Life mod for fabric out there I didn't know about when starting to work on this mod so please check out [con-craft way life of game mine by TheEpicBlock](https://github.com/TheEpicBlock/concraftwaylifeofgamemine/)
 
