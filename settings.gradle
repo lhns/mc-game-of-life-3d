@@ -1,3 +1,4 @@
 rootProject.name = 'mc-game-of-life-3d'
 
+include ':fabric-1.16.1'
 include ':fabric-1.16.2'
