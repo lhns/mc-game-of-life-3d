@@ -52,6 +52,9 @@ This is in contrast to the normal game rules 2333 by John Conway and allows the 
 
 [<img src="https://user-images.githubusercontent.com/1524059/88789314-e5dd3300-d196-11ea-99dc-2399393ef409.png" width="32"> Fabric Language Scala](https://www.curseforge.com/minecraft/mc-mods/fabric-language-scala)
 
+### [Forge](https://files.minecraftforge.net/)
+[<img src="https://user-images.githubusercontent.com/1524059/91673183-2849b500-eb33-11ea-8f9d-3d486f266000.png" width="32"> Scalable Cat's Force](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force)
+
 ## Similar mods
 There was already a Game of Life mod for fabric out there I didn't know about when starting to work on this mod so please check out [con-craft way life of game mine by TheEpicBlock](https://github.com/TheEpicBlock/concraftwaylifeofgamemine/)
 
