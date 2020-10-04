@@ -95,4 +95,3 @@ object CellSupportBlock {
 
   val ACTIVE: BooleanProperty = BooleanProperty.of("active")
 }
-
