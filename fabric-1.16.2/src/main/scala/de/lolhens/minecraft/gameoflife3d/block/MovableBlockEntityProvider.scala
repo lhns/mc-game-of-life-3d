@@ -7,4 +7,3 @@ trait MovableBlockEntityProvider {
 
   def isMovable(blockState: BlockState): Boolean
 }
-

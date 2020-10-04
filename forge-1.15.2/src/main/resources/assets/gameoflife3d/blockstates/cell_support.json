@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "gameoflife3d:block/cell_support_inactive"
+    },
+    "active=true": {
+      "model": "gameoflife3d:block/cell_support"
+    }
+  }
+}

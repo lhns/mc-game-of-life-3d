@@ -5,10 +5,10 @@ import net.minecraft.block._
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.state.{BooleanProperty, StateContainer}
-import net.minecraft.util.math.{BlockPos, BlockRayTraceResult}
 import net.minecraft.util.math.shapes.{ISelectionContext, VoxelShape, VoxelShapes}
 import net.minecraft.util.math.vector.Vector3i
-import net.minecraft.util.{ActionResult, ActionResultType, Hand}
+import net.minecraft.util.math.{BlockPos, BlockRayTraceResult}
+import net.minecraft.util.{ActionResultType, Hand}
 import net.minecraft.world.{IBlockReader, World}
 import net.minecraftforge.api.distmarker.{Dist, OnlyIn}
 
@@ -94,4 +94,3 @@ object CellSupportBlock {
 
   val ACTIVE: BooleanProperty = BooleanProperty.create("active")
 }
-
