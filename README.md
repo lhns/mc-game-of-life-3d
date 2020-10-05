@@ -19,6 +19,17 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 - Right click one of the cell blocks or cell support blocks.
 - The whole connected structure activates and the simulation starts.
 
+## Requirements
+### [Fabric](https://fabricmc.net/)
+[<img src="https://fabricmc.net/assets/logo.png" width="32"> Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+
+[<img src="https://user-images.githubusercontent.com/1524059/88789314-e5dd3300-d196-11ea-99dc-2399393ef409.png" width="32"> Fabric Language Scala](https://www.curseforge.com/minecraft/mc-mods/fabric-language-scala)
+
+### [Forge](https://files.minecraftforge.net/)
+[<img src="https://avatars2.githubusercontent.com/u/1390178" width="32"> Minecraft Forge](https://files.minecraftforge.net/)
+
+[<img src="https://user-images.githubusercontent.com/1524059/91673183-2849b500-eb33-11ea-8f9d-3d486f266000.png" width="32"> Scalable Cat's Force](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force)
+
 ## Recipes
 #### Cell Support
 ![Cell Support](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/recipe_cell_support.png)
@@ -45,17 +56,6 @@ The numbers 5766 define the game rules in this context:
 This is in contrast to the normal game rules 2333 by John Conway and allows the system to work properly in three dimensions. The lifeforms in 5766 should look very similar to the ones found in 2333. Another nice property of 5766 is that every 2333 structure works the same when it is 2 layers thick and sandwiched between two layers of other blocks. Here are a few examples of native 3D lifeforms:
 
 [![](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/small_stable_life_forms_5766.png)](https://wpmedia.wolfram.com/uploads/sites/13/2018/02/01-3-1.pdf)
-
-## Requirements
-### [Fabric](https://fabricmc.net/)
-[<img src="https://fabricmc.net/assets/logo.png" width="32"> Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-
-[<img src="https://user-images.githubusercontent.com/1524059/88789314-e5dd3300-d196-11ea-99dc-2399393ef409.png" width="32"> Fabric Language Scala](https://www.curseforge.com/minecraft/mc-mods/fabric-language-scala)
-
-### [Forge](https://files.minecraftforge.net/)
-[<img src="https://avatars2.githubusercontent.com/u/1390178" width="32"> Minecraft Forge](https://files.minecraftforge.net/)
-
-[<img src="https://user-images.githubusercontent.com/1524059/91673183-2849b500-eb33-11ea-8f9d-3d486f266000.png" width="32"> Scalable Cat's Force](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force)
 
 ## Similar mods
 There was already a Game of Life mod for fabric out there I didn't know about when starting to work on this mod so please check out [con-craft way life of game mine by TheEpicBlock](https://github.com/TheEpicBlock/concraftwaylifeofgamemine/)
