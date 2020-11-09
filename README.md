@@ -31,6 +31,8 @@ You can find out more about the variation here: https://wpmedia.wolfram.com/uplo
 
 [<img src="https://user-images.githubusercontent.com/1524059/91673183-2849b500-eb33-11ea-8f9d-3d486f266000.png" width="32"> Scalable Cat's Force](https://www.curseforge.com/minecraft/mc-mods/scalable-cats-force)
 
+[<img src="https://user-images.githubusercontent.com/1524059/94992271-30a96b80-0589-11eb-8fcd-b6c8ed66ad32.png" width="32"> MixinBootstrap](https://www.curseforge.com/minecraft/mc-mods/mixinbootstrap) (only required on 1.15.2)
+
 ## Recipes
 #### Cell Support
 ![Cell Support](https://raw.githubusercontent.com/LolHens/mc-game-of-life-3d/master/screenshots/recipe_cell_support.png)
