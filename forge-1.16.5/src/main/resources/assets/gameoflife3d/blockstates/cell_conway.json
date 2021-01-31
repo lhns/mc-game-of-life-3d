@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "state=inactive": {
+      "model": "gameoflife3d:block/cell_flat_inactive"
+    },
+    "state=alive": {
+      "model": "gameoflife3d:block/cell_flat"
+    },
+    "state=scheduled_dead": {
+      "model": "gameoflife3d:block/cell_flat"
+    },
+    "state=scheduled_alive": {
+      "model": "gameoflife3d:block/cell_flat"
+    }
+  }
+}
