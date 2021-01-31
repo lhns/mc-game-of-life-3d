@@ -4,7 +4,6 @@
   "package": "de.lolhens.minecraft.gameoflife3d.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AbstractBlockMixin",
     "PistonBlockMixin"
   ],
   "injectors": {
