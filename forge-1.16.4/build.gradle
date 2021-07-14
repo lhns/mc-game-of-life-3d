@@ -104,7 +104,10 @@ configurations {
 }
 
 repositories {
-    maven { url = 'https://minecraft.curseforge.com/api/maven/' }
+    maven {
+        url = 'https://minecraft.curseforge.com/api/maven/'
+        metadataSources { artifact() }
+    }
 }
 
 dependencies {
