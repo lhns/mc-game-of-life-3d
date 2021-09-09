@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "gameoflife3d",
+  "version": "${version}",
+  "name": "Game of Life 3D",
+  "description": "This mod implements John Conway's Game of Life and a 3D variation by Carter Bays (variation 5766).",
+  "authors": [
+    "LolHens"
+  ],
+  "contact": {
+    "homepage": "https://github.com/LolHens/mc-game-of-life-3d",
+    "sources": "https://github.com/LolHens/mc-game-of-life-3d"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/gameoflife3d/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "scala",
+        "value": "de.lolhens.minecraft.gameoflife3d.GameOfLife3dMod"
+      }
+    ]
+  },
+  "mixins": [
+    "gameoflife3d.mixins.json"
+  ],
+  "depends": {
+    "fabric-language-scala": "*",
+    "fabricloader": ">=0.7.4",
+    "fabric": ">=0.15.0",
+    "minecraft": "1.17.x"
+  }
+}
