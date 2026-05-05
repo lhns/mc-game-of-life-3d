@@ -91,9 +91,6 @@ mcdepprovider {
         bridgePackage.set('de.lolhens.minecraft.gameoflife3d.neoforge.mcdp_bridges')
     }
     sharedPackages.add('de.lolhens.minecraft.gameoflife3d.mixin.')
-    // AbstractBlockStateMixin uses `instanceof MovableBlockEntityProvider` + cast on a
-    // mod-private type — must be visible to the platform classloader (see fabric build.gradle).
-    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.block.')
 }
 
 // java-mixin-stubber

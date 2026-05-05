@@ -66,10 +66,6 @@ mcdepprovider {
     // Load the mixin package parent-first since mod-private mixin types reference each other
     // in class headers (the bridge codegen leaves class-header references unrewritten).
     sharedPackages.add('de.lolhens.minecraft.gameoflife3d.mixin.')
-    // AbstractBlockStateMixin uses `instanceof MovableBlockEntityProvider` + cast (opcodes
-    // 193/192) on a mod-private type. The bridge codegen cannot rewrite local-variable type
-    // references, so this package must be visible to the platform classloader.
-    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.block.')
 }
 
 // java-mixin-stubber — generate stubs from common-1.21.1's Scala/Java sources.
