@@ -1,0 +1,138 @@
+// fabric-loom and de.lhns.mcdp come from build-1.21.1.gradle's plugins{} block (with
+// `apply false`). The stubber stays here since it's only used by this subproject.
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'de.lolhens:java-mixin-stubber:0.0.2'
+    }
+}
+
+apply plugin: 'fabric-loom'
+apply plugin: 'de.lhns.mcdp'
+apply plugin: 'scala'
+apply plugin: 'maven-publish'
+
+archivesBaseName = parent.project.archives_base_name
+version = parent.version + "+fabric-${project.minecraft_version}"
+group = parent.group
+
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
+
+// Pull in shared sources from common-1.21.1. All mixins + Scala co-live under src/main/scala/
+// so scalac does joint compilation.
+sourceSets.main.scala.srcDirs += project(':common-1.21.1').file('src/main/scala')
+sourceSets.main.resources.srcDirs += project(':common-1.21.1').file('src/main/resources')
+
+repositories {
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
+    mavenCentral()
+    maven {
+        name = 'sonatype-central-snapshots'
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${project.parchment_minecraft}:${project.parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // mcdp unified runtime adapter — provides the `mcdepprovider` LanguageAdapter referenced
+    // in fabric.mod.json and the PreLaunchEntrypoint that wires up per-mod URLClassLoaders.
+    modImplementation "de.lhns.mcdp:mcdp:${project.mcdp_version}"
+
+    // Scala stdlib goes through mcdp's per-mod URLClassLoader at runtime.
+    mcdepImplementation "org.scala-lang:scala3-library_3:${project.scala3_version}"
+}
+
+mcdepprovider {
+    lang.set('scala')
+    // Override the auto-derived bridge package: mcdp's default builds it as
+    //   <group>.<projectName.replace('-','_')>.mcdp_mixin_bridges
+    // which for projectName "fabric-1.21.1" produces invalid Java identifiers ("21", "1").
+    bridges {
+        bridgePackage.set('de.lolhens.minecraft.gameoflife3d.fabric.mcdp_bridges')
+    }
+    // Load the mixin package parent-first since mod-private mixin types reference each other
+    // in class headers (the bridge codegen leaves class-header references unrewritten).
+    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.mixin.')
+    // AbstractBlockStateMixin uses `instanceof MovableBlockEntityProvider` + cast (opcodes
+    // 193/192) on a mod-private type. The bridge codegen cannot rewrite local-variable type
+    // references, so this package must be visible to the platform classloader.
+    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.block.')
+}
+
+// java-mixin-stubber — generate stubs from common-1.21.1's Scala/Java sources.
+def mixinstubsDir = file("$compileJava.temporaryDir/mixinstubs")
+sourceSets.main.java.srcDirs += mixinstubsDir
+
+task mixinstubs {
+    doLast {
+        delete(mixinstubsDir)
+        de.lolhens.jstubber.Stubber.MIXIN.stubDirectory(
+            project(':common-1.21.1').file('src/main/scala').toPath(),
+            mixinstubsDir.toPath()
+        )
+    }
+}
+compileJava.dependsOn(mixinstubs)
+compileJava.doLast {
+    delete(compileJava.destinationDirectory)
+    delete(mixinstubsDir)
+}
+
+compileScala.doFirst {
+    compileScala.options.compilerArgs += compileJava.options.compilerArgs
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.encoding = 'UTF-8'
+    scalaCompileOptions.additionalParameters = ['-release', '21']
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+jar {
+    from('LICENSE') {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) { builtBy remapJar }
+            artifact(sourcesJar) { builtBy remapSourcesJar }
+        }
+    }
+    repositories {
+    }
+}

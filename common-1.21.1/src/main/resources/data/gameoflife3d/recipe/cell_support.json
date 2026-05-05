@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RSR",
+    "SES",
+    "RSR"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "S": "minecraft:smooth_stone",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "gameoflife3d:cell_support",
+    "count": 16
+  }
+}

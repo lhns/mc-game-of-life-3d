@@ -1,0 +1,8 @@
+{
+  "block.gameoflife3d.cell_conway": "John Conway's 2D Cell",
+  "item.gameoflife3d.cell_conway": "John Conway's 2D Cell",
+  "block.gameoflife3d.cell_bays": "Carter Bays' 3D Cell",
+  "item.gameoflife3d.cell_bays": "Carter Bays' 3D Cell",
+  "block.gameoflife3d.cell_support": "Cell Support",
+  "item.gameoflife3d.cell_support": "Cell Support"
+}

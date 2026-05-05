@@ -1,0 +1,6 @@
+{
+  "parent": "gameoflife3d:block/cross",
+  "textures": {
+    "texture": "gameoflife3d:block/cell"
+  }
+}

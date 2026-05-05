@@ -1,0 +1,32 @@
+modLoader = "mcdepprovider"
+loaderVersion = "[1,)"
+license = "Apache-2.0"
+issueTrackerURL = "https://github.com/LolHens/mc-game-of-life-3d/issues"
+
+[[mods]]
+modId = "gameoflife3d"
+version = "${version}"
+displayName = "Game of Life 3D"
+displayURL = "https://github.com/LolHens/mc-game-of-life-3d"
+logoFile = "icon.png"
+authors = "LolHens"
+description = '''
+This mod implements John Conway's Game of Life and a 3D variation by Carter Bays (variation 5766).
+'''
+
+[[mixins]]
+config = "gameoflife3d.mixins.json"
+
+[[dependencies.gameoflife3d]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gameoflife3d]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.22)"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,8 @@
+{
+  "parent": "gameoflife3d:block/flat",
+  "textures": {
+    "bottom": "gameoflife3d:block/cell_inactive",
+    "top": "gameoflife3d:block/cell_inactive",
+    "side": "gameoflife3d:block/cell_inactive"
+  }
+}

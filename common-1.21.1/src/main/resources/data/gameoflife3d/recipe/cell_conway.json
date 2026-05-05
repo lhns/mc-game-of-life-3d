@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CC"
+  ],
+  "key": {
+    "C": "gameoflife3d:cell_support"
+  },
+  "result": {
+    "id": "gameoflife3d:cell_conway",
+    "count": 1
+  }
+}

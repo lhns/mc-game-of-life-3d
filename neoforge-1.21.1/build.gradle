@@ -1,0 +1,162 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.neoforged.net/releases' }
+    }
+    dependencies {
+        classpath 'de.lolhens:java-mixin-stubber:0.0.2'
+    }
+}
+
+plugins {
+    id 'net.neoforged.moddev' version '2.0.91'
+    // de.lhns.mcdp is declared in build-1.21.1.gradle's plugins{} block (with `apply false`)
+    // so the plugin classloader is shared with :fabric-1.21.1 — re-applied here without version.
+    id 'de.lhns.mcdp'
+    id 'scala'
+    id 'maven-publish'
+}
+
+archivesBaseName = parent.project.archives_base_name
+version = parent.version + "+neoforge-${project.minecraft_version}"
+group = parent.group
+
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
+
+// Pull in shared sources from common-1.21.1.
+sourceSets.main.scala.srcDirs += project(':common-1.21.1').file('src/main/scala')
+sourceSets.main.resources.srcDirs += project(':common-1.21.1').file('src/main/resources')
+
+repositories {
+    maven {
+        name = 'NeoForged'
+        url = 'https://maven.neoforged.net/releases'
+    }
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
+    maven {
+        name = 'SpongePowered'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+    mavenCentral()
+    maven {
+        name = 'sonatype-central-snapshots'
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+    }
+}
+
+neoForge {
+    version = project.neoforge_version
+    parchment {
+        mappingsVersion = project.parchment_version
+        minecraftVersion = project.parchment_minecraft
+    }
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+        data {
+            data()
+        }
+    }
+    mods {
+        gameoflife3d {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    // mcdp unified runtime adapter — discovers @Mod-annotated classes via
+    // ModFileScanData and dispatches the constructor with subset matching of
+    // [IEventBus, ModContainer, Dist].
+    implementation "de.lhns.mcdp:mcdp:${project.mcdp_version}"
+
+    // Scala stdlib goes through the per-mod URLClassLoader served by mcdp.
+    mcdepImplementation "org.scala-lang:scala3-library_3:${project.scala3_version}"
+
+    // Intentionally no Mixin annotation processor on NeoForge: runtime is Mojmap-native so
+    // no refmap is needed. Validation still happens on the Fabric + common modules.
+}
+
+mcdepprovider {
+    lang.set('scala')
+    bridges {
+        bridgePackage.set('de.lolhens.minecraft.gameoflife3d.neoforge.mcdp_bridges')
+    }
+    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.mixin.')
+    // AbstractBlockStateMixin uses `instanceof MovableBlockEntityProvider` + cast on a
+    // mod-private type — must be visible to the platform classloader (see fabric build.gradle).
+    sharedPackages.add('de.lolhens.minecraft.gameoflife3d.block.')
+}
+
+// java-mixin-stubber
+def mixinstubsDir = file("$compileJava.temporaryDir/mixinstubs")
+sourceSets.main.java.srcDirs += mixinstubsDir
+
+task mixinstubs {
+    doLast {
+        delete(mixinstubsDir)
+        de.lolhens.jstubber.Stubber.MIXIN.stubDirectory(
+            project(':common-1.21.1').file('src/main/scala').toPath(),
+            mixinstubsDir.toPath()
+        )
+    }
+}
+compileJava.dependsOn(mixinstubs)
+compileJava.doLast {
+    delete(compileJava.destinationDirectory)
+    delete(mixinstubsDir)
+}
+
+compileScala.doFirst {
+    compileScala.options.compilerArgs += compileJava.options.compilerArgs
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand 'version': project.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.encoding = 'UTF-8'
+    scalaCompileOptions.additionalParameters = ['-release', '21']
+}
+
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'    : project.name,
+            'Specification-Vendor'   : parent.project.mod_author,
+            'Specification-Version'  : '1',
+            'Implementation-Title'   : project.name,
+            'Implementation-Version' : "${version}",
+            'Implementation-Vendor'  : parent.project.mod_author,
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            'MixinConfigs'           : 'gameoflife3d.mixins.json',
+        ])
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+    }
+}

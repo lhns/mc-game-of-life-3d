@@ -1,0 +1,8 @@
+{
+  "block.gameoflife3d.cell_conway": "John Conways 2D Zelle",
+  "item.gameoflife3d.cell_conway": "John Conways 2D Zelle",
+  "block.gameoflife3d.cell_bays": "Carter Bays 3D Zelle",
+  "item.gameoflife3d.cell_bays": "Carter Bays 3D Zelle",
+  "block.gameoflife3d.cell_support": "Zellstütze",
+  "item.gameoflife3d.cell_support": "Zellstütze"
+}
