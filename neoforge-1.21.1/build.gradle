@@ -1,5 +1,9 @@
 buildscript {
     repositories {
+        // mavenLocal FIRST: this branch tests a locally published mcdp build. Listed after
+        // the remote repos it loses resolution and silently builds against the last
+        // published snapshot instead of the tree under test.
+        mavenLocal()
         gradlePluginPortal()
         maven { url = 'https://maven.neoforged.net/releases' }
     }
@@ -29,6 +33,10 @@ sourceSets.main.scala.srcDirs += project(':common-1.21.1').file('src/main/scala'
 sourceSets.main.resources.srcDirs += project(':common-1.21.1').file('src/main/resources')
 
 repositories {
+    // mavenLocal FIRST: this branch tests a locally published mcdp build. Listed after
+    // the remote repos it loses resolution and silently builds against the last
+    // published snapshot instead of the tree under test.
+    mavenLocal()
     maven {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
@@ -76,7 +84,7 @@ dependencies {
     // mcdp unified runtime adapter — discovers @Mod-annotated classes via
     // ModFileScanData and dispatches the constructor with subset matching of
     // [IEventBus, ModContainer, Dist].
-    implementation "de.lhns.mcdp:mcdp:${project.mcdp_version}"
+    implementation "de.lhns.mcdp:mcdp-1.21:${project.mcdp_version}"
 
     // Scala stdlib goes through the per-mod URLClassLoader served by mcdp.
     mcdepImplementation "org.scala-lang:scala3-library_3:${project.scala3_version}"
